@@ -26,4 +26,5 @@ Google的論文《Omega flexible, scalable schedulers for large compute clusters
 缺點：只有论文，无具体实现，在小集群下，沒有优势。
 
 ## 参考文章 ##
-https://www.xuebuyuan.com/zh-hant/2102324.html
+https://www.xuebuyuan.com/zh-hant/2102324.html  
+http://dongxicheng.org/mapreduce-nextgen/google-omega
