@@ -10,6 +10,7 @@ Google的論文《Omega flexible, scalable schedulers for large compute clusters
 而這裡的“共享數據”實際上就是整個集群的實時資源使用信息。一旦引入共享數據後，共享數據的並發訪問方式就成為
 該系統設計的核心，而Omega則採用了傳統數據庫中基於多版本的並發訪問控制方式（也稱為“樂觀鎖”, MVCC, Multi-Version Concurrency Control），
 這大大提升了Omega的並發性。  
+![三种系统比较](http://dongxicheng.org/wp-content/uploads/2013/04/three-types-of-schedulers.jpg "资源管理系统")
 
 >由於Omega不再有集中式的調度模塊，因此，不能像Mesos或者YARN那樣，在一個統一模塊中完成以下功能：對整個集群中的所有資源分組，
 限制每類應用程序的資源使用量，限制每個用戶的資源使用量等，這些全部由各個應用程序調度器自我管理和控制.  
@@ -25,4 +26,5 @@ Google的論文《Omega flexible, scalable schedulers for large compute clusters
 缺點：只有论文，无具体实现，在小集群下，沒有优势。
 
 ## 参考文章 ##
-https://www.xuebuyuan.com/zh-hant/2102324.html
+https://www.xuebuyuan.com/zh-hant/2102324.html  
+http://dongxicheng.org/mapreduce-nextgen/google-omega
