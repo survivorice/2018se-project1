@@ -22,4 +22,7 @@ Google的論文《Omega flexible, scalable schedulers for large compute clusters
 ## 优缺点 ##
 优点：共享资源狀態，支持更大的集群和更高的並发。  
 
-缺點：只有论文，无具体实现，在小集群下，沒有优势。  
+缺點：只有论文，无具体实现，在小集群下，沒有优势。
+
+## 参考文章 ##
+https://www.xuebuyuan.com/zh-hant/2102324.html
