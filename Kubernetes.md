@@ -1,6 +1,6 @@
 Kubernetes
 =====
-![Kubernetes Photo](https://github.com/survivorice/2018se-project1/tree/master/photo/1.jpg)
+![Kubernetes Photo](https://github.com/survivorice/2018se-project1/blob/master/photo/1.jpg?raw=true)
 
 什么是Kubernetes？
 ----------
@@ -100,4 +100,4 @@ Kubernetes Master
 <http://www.dockone.io/article/932>
 <http://omerio.com/2015/12/18/learn-the-kubernetes-key-concepts-in-10-minutes/>
 
-详细使用方法可以参考Kubernetes 用户手册<https://kubernetes.io/docs/home/?path=users&persona=app-developer&level=foundational>
+详细使用方法可以参考Kubernetes用户手册<https://kubernetes.io/docs/home/?path=users&persona=app-developer&level=foundational>
