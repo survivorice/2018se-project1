@@ -10,15 +10,20 @@ Ceph是一个可靠地、自动重均衡、自动恢复的分布式存储系统�
 
 ## Ceph组件 ##
 从下面这张图来简单学习下，Ceph 的架构组件。
-![image][https://images2017.cnblogs.com/blog/1109179/201711/1109179-20171106211611450-2111366494.png]
+![image](https://images2017.cnblogs.com/blog/1109179/201711/1109179-20171106211611450-2111366494.png)
   
 Monitor， 负责监视整个集群的运行状况，信息由维护集群成员的守护程序来提供，各节点之间的状态、集群配置信息。Ceph monitor map主要包括OSD map、PG map、MDS map 和 CRUSH 等，这些 map 被统称为集群 Map。ceph monitor 不存储任何数据。下面分别开始介绍这些map的功能：
 
 Monitor map：包括有关monitor 节点端到端的信息，其中包括 Ceph 集群ID，监控主机名和IP以及端口。并且存储当前版本信息以及最新更改信息，通过 "ceph mon dump" 查看 monitor map。  
+
 OSD map：包括一些常用的信息，如集群ID、创建OSD map的 版本信息和最后修改信息，以及pool相关信息，主要包括pool 名字、pool的ID、类型，副本数目以及PGP等，还包括数量、状态、权重、最新的清洁间隔和OSD主机信息。通过命令 "ceph osd dump" 查看。  
+
 PG map：包括当前PG版本、时间戳、最新的OSD Map的版本信息、空间使用比例，以及接近占满比例信息，同事，也包括每个PG ID、对象数目、状态、OSD 的状态以及深度清理的详细信息。通过命令 "ceph pg dump" 可以查看相关状态。  
+
 CRUSH map： CRUSH map 包括集群存储设备信息，故障域层次结构和存储数据时定义失败域规则信息。通过 命令 "ceph osd crush map" 查看。  
+
 MDS map：MDS Map 包括存储当前 MDS map 的版本信息、创建当前的Map的信息、修改时间、数据和元数据POOL ID、集群MDS数目和MDS状态，可通过"ceph mds dump"查看。  
+
 OSD，Ceph OSD 是由物理磁盘驱动器、在其之上的 Linux 文件系统以及 Ceph OSD 服务组成。Ceph OSD 将数据以对象的形式存储到集群中的每个节点的物理磁盘上，完成存储数据的工作绝大多数是由 OSD daemon 进程实现。在构建 Ceph OSD的时候，建议采用SSD 磁盘以及xfs文件系统来格式化分区。BTRFS 虽然有较好的性能，但是目前不建议使用到生产中，目前建议还是处于围观状态。  
 
 Ceph 元数据，MDS。ceph 块设备和RDB并不需要MDS，MDS只为 CephFS服务。  
@@ -33,7 +38,7 @@ CephFS，Ceph文件系统，与POSIX兼容的文件系统，基于librados封装
 
 简单说下CRUSH，Controlled Replication Under Scalable Hashing，它表示数据存储的分布式选择算法， ceph 的高性能/高可用就是采用这种算法实现。CRUSH 算法取代了在元数据表中为每个客户端请求进行查找，它通过计算系统中数据应该被写入或读出的位置。CRUSH能够感知基础架构，能够理解基础设施各个部件之间的关系。并且CRUSH保存数据的多个副本，这样即使一个故障域的几个组件都出现故障，数据依然可用。CRUSH 算是使得 ceph 实现了自我管理和自我修复。
 
-RADOS 分布式存储相较于传统分布式存储的优势在于:
+RADOS 分布式存储相较于传统分布式存储的优势在于:  
 
-　　1. 将文件映射到object后，利用Cluster Map 通过CRUSH 计算而不是查找表方式定位文件数据存储到存储设备的具体位置。优化了传统文件到块的映射和Block MAp的管理。
+　　1. 将文件映射到object后，利用Cluster Map 通过CRUSH 计算而不是查找表方式定位文件数据存储到存储设备的具体位置。优化了传统文件到块的映射和Block MAp的管理。  
 　　2. RADOS充分利用OSD的智能特点，将部分任务授权给OSD，最大程度地实现可扩展。  
