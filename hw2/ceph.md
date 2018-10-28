@@ -47,7 +47,7 @@ RADOS 分布式存储相较于传统分布式存储的优势在于:
 
 在分布式存储系统中比较关注的一点是如何使得数据能够分布得更加均衡，常见的数据分布算法有一致性Hash和Ceph的Crush算法。Crush是一种伪随机的控制数据分布、复制的算法，Ceph是为大规模分布式存储而设计的，数据分布算法必须能够满足在大规模的集群下数据依然能够快速的准确的计算存放位置，同时能够在硬件故障或扩展硬件设备时做到尽可能小的数据迁移，Ceph的CRUSH算法就是精心为这些特性设计的，可以说CRUSH算法也是Ceph的核心之一。  
 首先下图展示了ceph内部各单位之间的关系：
-![img](https://images2017.cnblogs.com/blog/1302233/201712/1302233-20171224011812365-1637840216.png)
+![img](https://images2017.cnblogs.com/blog/1302233/201712/1302233-20171224011812365-1637840216.png)  
 ceph开发了 CRUSH（Controoled Replication Under Scalable Hashing），一种伪随机数据分布算法，它能够在层级结构的存储集群中有效的分布对象的副本。CRUSH实现了一种伪随机(确定性)的函数，它的参数 是object id或object group id，并返回一组存储设备(用于保存object副本OSD)。CRUSH需要cluster map(描述存储集群的层级结构)、和副本分布策略(rule)。  
 CRUSH有两个关键优点：  
 任何组件都可以独立计算出每个object所在的位置(去中心化)。  
