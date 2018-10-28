@@ -9,6 +9,7 @@ Ceph是一个可靠地、自动重均衡、自动恢复的分布式存储系统�
 3.文件存储，通常意义是支持 POSIX 接口，它跟传统的文件系统如 Ext4 是一个类型的，但区别在于分布式存储提供了并行化的能力，如 Ceph 的 CephFS (CephFS是Ceph面向文件存储的接口)，但是有时候又会把 GlusterFS ，HDFS 这种非POSIX接口的类文件存储接口归入此类。当然 NFS、NAS也是属于文件系统存储；  
 
 ## Ceph组件 ##
+Ceph的核心组件包括Ceph OSD、Ceph Monitor和Ceph MDS。  
 从下面这张图来简单学习下，Ceph 的架构组件。
 ![image](https://images2017.cnblogs.com/blog/1109179/201711/1109179-20171106211611450-2111366494.png)
   
@@ -42,3 +43,33 @@ RADOS 分布式存储相较于传统分布式存储的优势在于:
 
 　　1. 将文件映射到object后，利用Cluster Map 通过CRUSH 计算而不是查找表方式定位文件数据存储到存储设备的具体位置。优化了传统文件到块的映射和Block MAp的管理。  
 　　2. RADOS充分利用OSD的智能特点，将部分任务授权给OSD，最大程度地实现可扩展。  
+## Ceph数据分布算法 ##
+
+在分布式存储系统中比较关注的一点是如何使得数据能够分布得更加均衡，常见的数据分布算法有一致性Hash和Ceph的Crush算法。Crush是一种伪随机的控制数据分布、复制的算法，Ceph是为大规模分布式存储而设计的，数据分布算法必须能够满足在大规模的集群下数据依然能够快速的准确的计算存放位置，同时能够在硬件故障或扩展硬件设备时做到尽可能小的数据迁移，Ceph的CRUSH算法就是精心为这些特性设计的，可以说CRUSH算法也是Ceph的核心之一。  
+
+## Ceph的容错处理 ##
+对于Ceph文件系统，错误分两类：一类是磁盘错误或者数据损坏（ disk error or  corruptted data）， 这类错误OSD会自己报告和处理。（self report ）； 第二类是OSD失去网络连接导致该OSD不可达（unreachable on the network）这种情况下需要主动检测（active monitor），在同一个PG组中的其它OSD会发心跳信息互相检测。 这种检测的一个优化的方法就是，当replication复制操作时，就可以顺带检测，不用发单独的消息来检测，只有一段时间没有replication 操作时，才发ping消息里检测。  
+
+OSD的失效状态有两种：一种是down状态，这种状态下，被认为是临时错误。 在这种情况下，如果是primay，其任务由下一个replicate接手。如果该OSD没有迅速恢复（quickly recovery），那么就被标记为out状态，在这种状态下，将有新的osd加入这个PG中。  
+
+如何标记一个OSD 从down状态 标记为out状态？由于网络分区的问题，需要通过 Ceph Monitor 来裁定。  
+
+## Ceph 的写流程 ##
+ 客户端先写主副本，然后同步到两个从副本。主副本等待从副本的ack消息和apply消息。当主副本收到ack消息，说明写操作已经写在内存中完成，收到apply 消息，说明已经apply到磁盘上了。  
+
+如果在写的过程中，主副本失效，按顺序下一个从副本接管主副本的工作，这个时候是否返回给客户端写正确？在这种情况下，客户端只是判断正常工作的 （acting）的 OSD的返回结果，只要所有正常工作的OSD返回即认为成功，虽然这时候可能只有两副本成功。同时该临时primay必须保存所有操作的recovey队 列里，如果原primay恢复，可以replay所有recovery队列里的操作，如果主副本从down到out状态，也即是永久失效，临时 primay转正，由临时primay为正式primay，只是需要加入一个新的OSD到该PG中。  
+
+如果是从副本失效，就比较简单。临时失效，主replay所有写操作，如过永久失效，新加入一个OSD到PG中就可以了。
+
+## 恢复 ##
+当有OSD失效，恢复或者增加一个新的OSD时，导致OSD cluster map的变换。Ceph处理以上三种情况的策略是一致的。为了恢复，ceph保存了两类数据，一个是每个OSD的一个version，另一个是PG修改的 log，这个log包括PG修改的object 的名称和version。  
+
+当一个OSD接收到cluster map的更新时：  
+
+1）检查该OSD的所属的PG，对每个PG，通过CRUSH算法，计算出主副本的三个OSD  
+
+2）如何该PG里的OSD发生了改变，这时候，所有的replicate向主副本发送log，也就是每个对象最后的version，当primay 决定了最后各个对象的正确的状态，并同步到所有副本上。  
+
+3）每个OSD独立的决定，是从其它副本中恢复丢失或者过时的（missing or outdated）对象。 (如何恢复? 好像是整个对象全部拷贝，或者基于整个对象拷贝，但是用了一些类似于rsync的算法？目前还不清楚）  
+
+4）当OSD在恢复过程中，delay所有的请求，直到恢复成功。  
