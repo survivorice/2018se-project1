@@ -81,3 +81,8 @@ OSD的失效状态有两种：一种是down状态，这种状态下，被认为�
 3）每个OSD独立的决定，是从其它副本中恢复丢失或者过时的（missing or outdated）对象。 (如何恢复? 好像是整个对象全部拷贝，或者基于整个对象拷贝，但是用了一些类似于rsync的算法？目前还不清楚）  
 
 4）当OSD在恢复过程中，delay所有的请求，直到恢复成功。  
+
+## 参考 ##
+https://www.cnblogs.com/yangxiaoyi/p/7795274.html  
+https://www.cnblogs.com/luohaixian/p/8087591.html  
+https://www.cnblogs.com/vincenshen/articles/6224835.html
