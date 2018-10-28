@@ -11,7 +11,7 @@ Ceph是一个可靠地、自动重均衡、自动恢复的分布式存储系统�
 ## Ceph组件 ##
 Ceph的核心组件包括Ceph OSD、Ceph Monitor和Ceph MDS。  
 从下面这张图来简单学习下，Ceph 的架构组件。
-![image](https://images2017.cnblogs.com/blog/1109179/201711/1109179-20171106211611450-2111366494.png)
+![image](https://images2017.cnblogs.com/blog/1109179/201711/1109179-20171106211611450-2111366494.png)  
   
 Monitor， 负责监视整个集群的运行状况，信息由维护集群成员的守护程序来提供，各节点之间的状态、集群配置信息。Ceph monitor map主要包括OSD map、PG map、MDS map 和 CRUSH 等，这些 map 被统称为集群 Map。ceph monitor 不存储任何数据。下面分别开始介绍这些map的功能：
 
