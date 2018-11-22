@@ -26,7 +26,7 @@ iperf 命令：可以测带宽，丢包，抖动， 但是测不了时延；
 # 结果
 测试1：  
 $ping www.baidu.com -c 10 -s 1024  
-结果:![](answer.png)  
+结果:![](answer.PNG)  
 测试2：  
 $ping 8.8.8.8 -c 50 -s 1024  
 结果：  
