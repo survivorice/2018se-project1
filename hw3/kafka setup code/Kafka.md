@@ -115,7 +115,7 @@ syncLimit=2
 
   producer = KafkaProducer(bootstrap_servers='localhost:9092')
 
-  for i in range(100):
+  for i in range(50):
       num = str(random.randrange(0, 10))
 
       producer.send('counter', str.encode(num))
