@@ -37,7 +37,7 @@ syncLimit=2
 
 - The result is shown as follows.
 
-![zookeeper-start](https://github.com/survivorice/2018se-project1/tree/master/photo/zookeeper_start.png)
+![zookeeper-start](../../photo/zookeeper_start.png)
 
 - Start the CLI which will connect to the server
 
