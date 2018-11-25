@@ -189,5 +189,110 @@ syncLimit=2
 
 ![consumer](../../photo//consumer-threads-test.png)
 
+## 4. Streaming Processing
+
+#### 4.1 A Scenario of Order Collection and Delivery
+
+- Suppose our Kafka cluster serves in an online-shopping system. Our Kafka server is a request middleware which accepts various types of requests and stores them by category in different topics, Kafka producer is a request collector that forwards requests from realistic customers in different regions to the same Kafka server, and Kafka consumer fetches requests data from server to take different actuating logics for each category.
+- For simplification, we use threads to simulate producers in various regions, and there are 2 types of request - 'order' and 'cancel'. For an 'order' request,  producer will provide its ID and account of money, for 'cancel' request, producer will only provide ID information.
+- Also for simplification, we only print different messages for there 2 kinds of order in place of different processing logics.
+
+#### 4.2 Producer
+
+- The producer creates 4 threads using procedure 'mainloop', mostly they send an 'order' request to server, while there is also possibility to send a 'cancel' request instead.
+
+```python
+# ng=utf-8
+
+from kafka import KafkaProducer
+import time
+import random
+from multiprocessing import Process, Lock, Manager
+from multiprocessing.sharedctypes import Value
+import os
+
+
+def mainloop(tid, lock):
+    random_section = 15
+    cancel_id = -1
+    producer = KafkaProducer(bootstrap_servers=['127.0.0.1:9092'])
+    while True:
+        with lock:
+            id.value = id.value + 1
+            this_id = id.value
+
+        if (this_id % random_section == 0):
+            random_section = random.randrange(15, 40)
+            cancel_id = this_id + random.randrange(0, 20)
+
+        money = random.randrange(15, 4000)
+if (this_id != cancel_id):
+    msg = "collector %d send request id %d, money %d, " % (tid, this_id, money)
+    sendmsg = "%d,%d" % (this_id, money)
+    with lock:
+        print(msg)
+        producer.send('request', sendmsg.encode('utf-8'))
+else:
+    msg = "collector %d send cancel id %d, " % (tid, this_id)
+    sendmsg = "%d" % this_id
+    with lock:
+        print(msg)
+        producer.send('cancel', sendmsg.encode('utf-8'))
+
+        print(msg)
+        time.sleep(1)
+    producer.close()
+
+
+if __name__ == "__main__":
+    threads = []
+
+    lock = Lock()
+    manager = Manager()
+    id = manager.Value('tmp', 0)
+
+    for ll in range(4):
+        t = Process(target=mainloop, args=(ll, lock))
+        t.daemon = True
+        threads.append(t)
+
+    for i in range(len(threads)):
+        threads[i].start()
+
+    for j in range(len(threads)):
+        threads[j].join()
+
+    print 'All subprocesses finish Processing.'
+```
+
+#### 4.3 Consumer
+
+- There are two consumers: cancel consumer and order consumer. The former one only prints ID , while the ladder one prints both ID and money together out.	
+
+  ```python
+  from kafka import KafkaConsumer
+  
+  consumer = KafkaConsumer('cancel', group_id='my_group', bootstrap_servers=['127.0.0.1:9092'])  
+  
+  for message in consumer:
+     print("%s:%d:%d: key=%s id=%s" % (message.topic, message.partition, message.offset, message.key, message.value))
+  ```
+
+  ```python
+  from kafka import KafkaConsumer
+  
+  consumer = KafkaConsumer('order', group_id='my_group', bootstrap_servers=['127.0.0.1:9092'])  
+  
+  for message in consumer:
+     list  = message.value.split(',');
+     print("%s:%d:%d: key=%s id=%s money=%s" % (message.topic, message.partition, message.offset, message.key, list[0], list[1]))
+  ```
+
+#### 4.4 Tests
+![d-producer-6](../../photo/d-producer.PNG)
+
+![d-cos-5](../../photo/d-cos-5.PNG)
+
+- So, the consumer do gets requests in the same order that the producer writes. This proves that Kafka really process in the stream.
 
 
