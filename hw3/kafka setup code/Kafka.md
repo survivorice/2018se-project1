@@ -45,9 +45,9 @@ syncLimit=2
   $ bin/zkCLI.sh 
   ```
 
-  ![zookeeper-cli1](https://github.com/survivorice/2018se-project1/tree/master/photo/zookeeper_cli1.png)
+  ![zookeeper-cli1](../../photo/zookeeper_cli1.png)
   
-  ![zookeeper-cli2](https://github.com/survivorice/2018se-project1/tree/master/photo/zookeeper_cli2.png)
+  ![zookeeper-cli2](../../photo/zookeeper_cli2.png)
 
 
 - It shows that Zookeeper has been successfully installed.
@@ -81,7 +81,7 @@ syncLimit=2
 
 - Lots of logs are shown in the shell. We just post a part of them.
 
-  ![kafka-start](https://github.com/survivorice/2018se-project1/tree/master/photo/kafka_start.png)
+  ![kafka-start](../../photo/kafka_start.png)
 
 
 
@@ -147,7 +147,7 @@ syncLimit=2
 
 - Part of the results is shown as follows.
 
-  ![producer——consumer](https://github.com/survivorice/2018se-project1/tree/master/photo/producer_consumer.png)
+  ![producer——consumer](../../photo/producer_consumer.png)
 
 
 
@@ -161,19 +161,19 @@ syncLimit=2
 - We use different partition numbers, replication numbers, batch sizes and record sizes to test the producer, and the results are as follows.
 - Here are test results with different partition numbers. We can see that the larger the partition number is, the lower the throughput(records/sec) will be.
 
-![consumer](https://github.com/survivorice/2018se-project1/tree/master/photo/producer-partition-test.png)
+![consumer](../../photo/producer-partition-test.png)
 
 - Here are test results with different replication numbers. We can see that the larger the replication number is, the lower the throughput(records/sec) will be.
 
-![consumer](https://github.com/survivorice/2018se-project1/tree/master/photo/producer-replication-test.png)
+![consumer](../../photo/producer-replication-test.png)
 
 - Here are test results with different batch sizes. We can see that the larger the batch size is, the higher the throughput(records/sec) will be. However, we can still see that if the batch size is larger than 30000, the throughput barely increases.
 
-![consumer](https://github.com/survivorice/2018se-project1/tree/master/photo/producer-batchsize-test.png)
+![consumer](../../photo/producer-batchsize-test.png)
 
 - Here are test results with different record sizes. We can see that the larger the record size is, the lower the throughput(records/sec) will be.
 
-![consumer](https://github.com/survivorice/2018se-project1/tree/master/photo/producer-recordsize-test.png)
+![consumer](../../photo/producer-recordsize-test.png)
 
 #### 2.2. Consumer test
 
@@ -183,11 +183,11 @@ syncLimit=2
 
 - Here are test results with different partition numbers. We can see that the larger the partition number is, the lower the throughput(records/sec) will be.
 
-![consumer](https://github.com/survivorice/2018se-project1/tree/master/photo/consumer-partition-test.png)
+![consumer](../../photo/consumer-partition-test.png)
 
 - Here are test results with different thread numbers. We can see that the more the threads are, the higher the throughput(records/sec) will be.
 
-![consumer](https://github.com/survivorice/2018se-project1/tree/master/photo//consumer-threads-test.png)
+![consumer](../../photo//consumer-threads-test.png)
 
 
 
