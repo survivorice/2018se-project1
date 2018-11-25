@@ -289,9 +289,9 @@ if __name__ == "__main__":
   ```
 
 #### 4.4 Tests
-![d-producer-6](../../photo/d-producer.PNG)
+![d-producer](../../photo/d-producer.PNG)
 
-![d-cos-5](../../photo/d-cos-5.PNG)
+![d-cos](../../photo/d-cos.PNG)
 
 - So, the consumer do gets requests in the same order that the producer writes. This proves that Kafka really process in the stream.
 
