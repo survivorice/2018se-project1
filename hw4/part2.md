@@ -172,7 +172,9 @@ service "kube-nginx" exposed
 http://127.0.0.1:31511
 ```
 这里展示的地址即启动的nginx容器服务地址，访问http://127.0.0.1:31511 于是便出现nginx首页，服务成功启动.
-
+<p align="center">
+<img width="700" align="center" src="src/images/0.jpg" />
+</p>
 #### 启动dashboard管理后台
 dashboard是kubernetes提供的容器服务管理后台，可视化界面，用来进行机器负载，集群管理，镜像扩容，配置数据等相关操作
 
@@ -197,7 +199,9 @@ dashboard是kubernetes提供的容器服务管理后台，可视化界面，用�
 kubectl get pods --all-namespaces
 ```
 
-![](./src/images/6.png)
+<p align="center">
+<img width="700" align="center" src="src/images/1.jpg" />
+</p>
 
 **查看client和server的version**
 
@@ -205,7 +209,9 @@ kubectl get pods --all-namespaces
 kubectl version
 ```
 
-![](./src/images/7.png)
+<p align="center">
+<img width="700" align="center" src="src/images/2.jpg" />
+</p>
 
 **查看所有的cs的状态**
 
@@ -213,4 +219,6 @@ kubectl version
 kubectl get cs
 ```
 
-![](./src/images/8.png)
+<p align="center">
+<img width="700" align="center" src="src/images/3.jpg" />
+</p>
